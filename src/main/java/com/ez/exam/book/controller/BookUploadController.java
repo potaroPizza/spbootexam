@@ -38,7 +38,7 @@ public class BookUploadController {
 	
 	@GetMapping("/bookWrite.do")
 	public String write_get() {
-		logger.info("책 등록 페이지");
+		logger.info("책 등록 페이지!");
 		
 		return "/bookUpload/bookWrite";
 		//=> http://localhost:9090/spboard/book/bookWrite.do
