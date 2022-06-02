@@ -1,0 +1,10 @@
+book 테이블에 업로드 컬럼 추가
+
+alter table book add fileName varchar2(150) null;
+alter table book add fileSize number            default 0;
+alter table book add downCount number     default 0;
+alter table book add originalFileName varchar2(50) null;
+
+select * from book;
+
+commit;

@@ -1,6 +1,10 @@
 package com.ez.exam.book.controller;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,33 +18,64 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ez.exam.book.model.BookDTO;
 import com.ez.exam.book.model.BookService;
+import com.ez.exam.common.ConstUtil;
+import com.ez.exam.common.FileUploadUtil;
 import com.ez.exam.common.PaginationInfo;
 import com.ez.exam.common.SearchVO;
-import com.ez.exam.common.ConstUtil;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/book")
+@RequestMapping("/bookUpload")
 @RequiredArgsConstructor
-public class BookController {
+public class BookUploadController {
 	private static final Logger logger
-		= LoggerFactory.getLogger(BookController.class);
+		= LoggerFactory.getLogger(BookUploadController.class);
 	
 	// @RequiredArgsConstructor 덕분에 final로 선언된 객체는 오토와이어링되고, 객체도 자동 주입됨
 	private final BookService bookService;
+	private final FileUploadUtil fileUploadUtil;
 	
 	@GetMapping("/bookWrite.do")
 	public String write_get() {
 		logger.info("책 등록 페이지");
 		
-		return "/book/bookWrite";
+		return "/bookUpload/bookWrite";
 		//=> http://localhost:9090/spboard/book/bookWrite.do
 	}
 	
 	@PostMapping("/bookWrite.do")
-	public String write_post(@ModelAttribute BookDTO bookDto) {
+	public String write_post(@ModelAttribute BookDTO bookDto,
+			HttpServletRequest request) {
 		logger.info("책 등록 처리, 매개변수 bookDto = {}", bookDto);
+		
+		//파일 업로드 처리
+				String fileName = "", originalFileName = "";
+				long fileSize = 0;	// 초기값, 업로드를 안했을때, 파일업로드 정보는 한개도없는것
+				try {
+					List<Map<String, Object>> fileList
+						= fileUploadUtil.fileUpload(request, ConstUtil.UPLOAD_FILE_FLAG);
+					
+					for(Map<String, Object> fileMap : fileList) {
+						//다중 파일 업로드 처리 해야함 (나중에)
+						
+						originalFileName = (String)fileMap.get("originalFileName");
+						fileName = (String)fileMap.get("fileName");
+						fileSize = (long)fileMap.get("fileSize");
+					}
+					
+					logger.info("파일 업로드 성공, fileName = {},  fileSize = {}",
+							fileName, fileSize);
+					
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				bookDto.setFileName(fileName);
+				bookDto.setOriginalFileName(originalFileName);
+				bookDto.setFileSize(fileSize);
 		
 		int cnt = bookService.insertBook(bookDto);
 		logger.info("책 등록 처리 결과, cnt = {}", cnt);

@@ -11,4 +11,10 @@ public class BookDTO {
 	private String publisher;
 	private int price;
 	private Timestamp joindate;
+	
+	//자료실 추가
+	private String fileName;
+	private long fileSize; 
+	private int downCount;
+    private String originalFileName;
 }
