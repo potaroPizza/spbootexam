@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ez.exam.book.model.BookDTO;
 import com.ez.exam.book.model.BookService;
@@ -41,7 +42,7 @@ public class BookUploadController {
 		logger.info("책 등록 페이지");
 		
 		return "/bookUpload/bookWrite";
-		//=> http://localhost:9090/spboard/book/bookWrite.do
+		//=> http://localhost:9091/exam/bookUpload/bookWrite.do
 	}
 	
 	@PostMapping("/bookWrite.do")
@@ -50,35 +51,36 @@ public class BookUploadController {
 		logger.info("책 등록 처리, 매개변수 bookDto = {}", bookDto);
 		
 		//파일 업로드 처리
-				String fileName = "", originalFileName = "";
-				long fileSize = 0;	// 초기값, 업로드를 안했을때, 파일업로드 정보는 한개도없는것
-				try {
-					List<Map<String, Object>> fileList
-						= fileUploadUtil.fileUpload(request, ConstUtil.UPLOAD_FILE_FLAG);
-					
-					for(Map<String, Object> fileMap : fileList) {
-						//다중 파일 업로드 처리 해야함 (나중에)
-						
-						originalFileName = (String)fileMap.get("originalFileName");
-						fileName = (String)fileMap.get("fileName");
-						fileSize = (long)fileMap.get("fileSize");
-					}
-					
-					logger.info("파일 업로드 성공, fileName = {},  fileSize = {}",
-							fileName, fileSize);
-					
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		String fileName = "", originalFileName = "";
+		long fileSize = 0;	// 초기값, 업로드를 안했을때, 파일업로드 정보는 한개도없는것
+		try {
+			List<Map<String, Object>> fileList
+				= fileUploadUtil.fileUpload(request, ConstUtil.UPLOAD_FILE_FLAG);
+			
+			for(Map<String, Object> fileMap : fileList) {
+				//다중 파일 업로드 처리 해야함 (나중에)
 				
-				bookDto.setFileName(fileName);
-				bookDto.setOriginalFileName(originalFileName);
-				bookDto.setFileSize(fileSize);
+				originalFileName = (String)fileMap.get("originalFileName");
+				fileName = (String)fileMap.get("fileName");
+				fileSize = (long)fileMap.get("fileSize");
+			}
+			
+			logger.info("파일 업로드 성공, fileName = {},  fileSize = {}",
+					fileName, fileSize);
+			
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		int cnt = bookService.insertBook(bookDto);
-		logger.info("책 등록 처리 결과, cnt = {}", cnt);
+		bookDto.setFileName(fileName);
+		bookDto.setOriginalFileName(originalFileName);
+		bookDto.setFileSize(fileSize);
+		
+		int cnt=bookService.insertBook(bookDto);
+		logger.info("책 등록 처리 결과, cnt={}", cnt);
+		
 		
 		// message.jsp로 보내도 상관없음.
 		return "redirect:/book/bookList.do";

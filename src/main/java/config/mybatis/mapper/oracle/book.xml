@@ -15,8 +15,10 @@
 		<selectKey resultType="int" keyProperty="no" order="BEFORE">
 			select book_seq.nextval from dual
 		</selectKey>
-		insert into book(no, title, price, publisher)
-		values(#{no}, #{title}, #{price}, #{publisher})
+		insert into book(no, title, price, publisher,
+			filename, originalFilename, filesize)
+		values(#{no}, #{title}, #{price}, #{publisher},
+			#{fileName}, #{originalFileName}, #{fileSize})
 	</insert>
 	
 	<select id="selectAll" parameterType="searchVo" resultType="BookDTO">
