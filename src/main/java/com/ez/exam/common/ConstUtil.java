@@ -4,7 +4,7 @@ public interface ConstUtil {
 	//게시판 페이징 관련 상수
 	// 인터페이스는 기본적으로, 멤버변수는 상수, 메소드는 추상메소드 이므로, 앞에 쓰는거 생략함
 	public static final int RECORD_COUNT = 5;
-	int BLOCKSIZE = 10;
+	int BLOCKSIZE = 5;
 	
 	//파일 업로드 관련 상수
 	String FILE_UPLOAD_TYPE = "test";		// 테스트시

@@ -3,6 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ez.exam.comment2.model.Comment2DAO">
+
 	<insert id="insertComment2" parameterType="Comment2VO">
 		<selectKey resultType="int" keyProperty="commentNo" order="BEFORE">
 			select comment2_seq.nextval from dual
@@ -10,6 +11,39 @@
 		insert into comment2(comment_no, user_id, comment_content)
 		values(#{commentNo}, #{userId}, #{commentContent})
 	</insert>
+	
+	<sql id="searchWhere">
+		<if test="searchKeyword != null and searchKeyword != ''">
+	        where ${searchCondition} 
+	        	like '%' || #{searchKeyword} || '%'
+		</if>
+	</sql>
+	
+	<select id="selectAll" parameterType="searchVo" resultType="Comment2VO">
+		select *
+		from
+		(
+		    select rownum as RNUM, A.*
+		    from
+		    (
+		        select * from comment2 
+		        <include refid="searchWhere"></include>
+		        order by comment_no desc
+		    )A
+		)
+		where RNUM > #{firstRecordIndex} 
+		<![CDATA[
+		and RNUM <= #{firstRecordIndex} + #{recordCountPerPage} ]]>
+	</select>
+	
+	<select id="getTotalRecord" parameterType="searchVo" resultType="int">
+		select count(*) from comment2 
+		<include refid="searchWhere"></include>
+	</select>
+	
+	<select id="selectByNo" parameterType="int" resultType="Comment2VO">
+		select * from comment2 where comment_no = #{commentNo}
+	</select>
 	
 </mapper>
 

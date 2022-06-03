@@ -64,7 +64,7 @@ public class PaginationInfo {
 		
 	
 	public int getFirstPage() {
-		firstPage= currentPage-((currentPage-1)%blockSize);
+		firstPage = currentPage-((currentPage-1)%blockSize);
 		//firstPage = ((getCurrentPage()-1)/getBlockSize())*getBlockSize() + 1;
 		return firstPage;
 	}
