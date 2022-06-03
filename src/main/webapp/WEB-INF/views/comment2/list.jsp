@@ -22,12 +22,12 @@
 </script>
 </head>
 <body>
-	<h1>책 목록</h1>
+	<h1>코멘트 목록</h1>
 	
 	<!-- 페이징 처리를 위한 form -->
 	<form action="<c:url value='/comment2/list.do'/>"
 		method="post" name="frmPage">
-		<input type="text" name="searchKeyword" value="${param.searchKeyword }">
+		<input type="test" name="searchKeyword" value="${param.searchKeyword }">
 		<input type="text" name="searchCondition" value="${param.searchCondition }">
 		<input type="text" name="currentPage">	
 	</form>
@@ -53,7 +53,7 @@
 							${vo.commentNo}</a></td>
 						<td>${vo.userId}</td>
 						<td>
-							<fmt:formatDate value="${vo.joindate}" pattern="yyyy-MM-dd"/>
+							<fmt:formatDate value="${vo.regDate}" pattern="yyyy-MM-dd"/>
 						</td>
 					</tr>
 
@@ -113,6 +113,6 @@
 		<input type="submit" value="검색">
     </form>
 	
-	<a href="<c:url value='/comment2/write.do'/> ">책 등록</a>
+	<a href="<c:url value='/comment2/write.do'/> ">코멘트 등록</a>
 </body>
 </html>

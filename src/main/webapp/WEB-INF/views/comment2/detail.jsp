@@ -7,14 +7,14 @@
 <html>
 <head>
 <meta charset="">
-<title>bookDetail.jsp</title>
+<title></title>
 <script type="text/javascript" src="<c:url value='/js/jquery-3.6.0.min.js'/> "></script>
 <script type="text/javascript">
 	$(function(){
 		$('#del').click(function(){
 			if(confirm("삭제하시겠습니까?")){
 				location.href 
-					= "<c:url value='/book/bookDelete.do?no=${param.no}'/> ";
+					= "<c:url value='/comment2/delete.do?commentNo=${param.commentNo}'/> ";
 			} else {
 				return;
 			}
@@ -24,14 +24,13 @@
 </head>
 <body>
 	<h1>책 상세보기</h1>
-	<p>번호 : ${param.no}</p>
-	<p>제목 : ${dto.title}</p>
-	<p>가격 : ${dto.price}</p>
-	<p>출판사 : ${dto.publisher}</p>
-	<p>등록일 : ${dto.joindate}</p>
+	<p>번호 : ${param.commentNo}</p>
+	<p>아이디 : ${vo.userId}</p>
+	<p>코멘트 : ${vo.commentContent}</p>
+	<p>등록일 : ${vo.regDate}</p>
 	<br>
-	<a href="<c:url value='/book/bookList.do'/> ">목록</a> |
-	<a href="bookEdit.do?no=${param.no}">수정</a> |
+	<a href="<c:url value='/comment2/list.do'/> ">목록</a> |
+	<a href="<c:url value='/edit.do?commentNo=${param.commentNo}'/> ">수정</a> |
 	<a href="#" id="del">삭제</a>
 </body>
 </html>
