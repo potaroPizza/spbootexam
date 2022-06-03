@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ez.exam.comment2.model.Comment2DAO">
+	<insert id="insertComment2" parameterType="Comment2VO">
+		<selectKey resultType="int" keyProperty="commentNo" order="BEFORE">
+			select comment2_seq.nextval from dual
+		</selectKey>
+		insert into comment2(comment_no, user_id, comment_content)
+		values(#{commentNo}, #{userId}, #{commentContent})
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
